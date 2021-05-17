@@ -40,6 +40,9 @@ int main() {
             drzewo = new bTree(w);
             drzewo->loadTree();
         }
+        else if (odp == "C") {
+            drzewo->searchWithCache();
+        }
         else if (odp == "S") {
             drzewo->printTree();
         } 

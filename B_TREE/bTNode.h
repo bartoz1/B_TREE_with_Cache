@@ -8,7 +8,7 @@ public:
 	bTNode** childs;
 	bTNode(int order);
 	bTNode(int order, bool isLeaf);
-	bool search(int s);	// szukanie wartosci w obecnym nodzie i nastepnie wywolanie wyszukiwania w dzieciach
+	int search(int s);	// szukanie wartosci w obecnym nodzie i nastepnie wywolanie wyszukiwania w dzieciach
 	void setLeaf();
 	void unSetLeaf();
 	void addKey(int key);

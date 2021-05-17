@@ -56,11 +56,20 @@ void bTree::search(int x) {
 	if (root == nullptr)
 		std::cout << x<<" -\n";
 	else {
-		if(root->search(x) == true)
-			std::cout << x<<" +\n";
+		if (root->search(x) != -1)
+			std::cout << x << " +" << '\n';
 		else
 			std::cout << x<<" -\n";
 	}
+}
+int bTree::searchAndGetLvl(int x) {
+	int lvl;
+	if (root == nullptr)
+		lvl = 0;
+	else {
+		lvl = root->search(x);		
+	}
+	return lvl;
 }
 
 void bTree::loadTree() {
@@ -104,4 +113,66 @@ bTNode* bTree::loadNode() {
 		}
 	}
 	return newNode;
+}
+
+void bTree::searchWithCache() {
+	int sumNoCache = 0;
+	int sumCache = 0;
+	std::cin >> cacheSize;
+	cache = new int[cacheSize];
+	int nbr, searchRes;
+	char ctrl='a';
+	while (ctrl != '\n') {
+		std::cin >> nbr;
+		std::cin.get(ctrl);		// wczytanie spacji lub konca linii
+		searchRes = searchAndGetLvl(nbr);
+		if (searchRes == -1) 
+			searchRes = getLeafLvl();;
+
+		sumNoCache += searchRes;
+		
+		if (!inCache(nbr)) {
+			sumCache += searchRes;
+			addToCache(nbr);
+		}
+	}
+	std::cout << "NO CACHE: " << sumNoCache << " CACHE: " << sumCache << '\n';
+}
+
+void bTree::addToCache(int data) {
+	shiftCache();
+	cache[0] = data;
+}
+
+void bTree::shiftCache() {
+	for (int i = cacheSize - 2; i >= 0; i--) {
+		cache[i + 1] = cache[i];
+	}
+}
+
+bool bTree::inCache(int data) {
+	for (int i = 0; i < cacheSize; i++) {
+		if (cache[i] == data)
+			return true;
+	}
+	return false;
+}
+
+int bTree::getLeafLvl() {
+	int lvl = 0;
+	bTNode* checker = root;
+	while (checker != nullptr) {
+		lvl++;
+		if (checker->isLeaf)
+			break;
+		checker = checker->childs[0];
+	}
+	return lvl;
+}
+
+void bTree::printCache() {
+	for (int i = 0; i < cacheSize; i++) {
+		std::cout << cache[i] << " ";
+	}
+	std::cout << " | ";
 }

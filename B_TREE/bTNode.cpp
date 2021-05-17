@@ -19,21 +19,23 @@ bTNode::bTNode(int t, bool isLeaf) {
 	keysCount = 0;
 }
 
-bool bTNode::search(int s) {
-
+int bTNode::search(int s) {
+	int lvl = 0;
 	for (int i = 0;i < this->keysCount;i++) {
 		if (keys[i] == s)
-			return true;
+			return ++lvl;
 	}
 	if (this->isLeaf)
-		return false;
+		return -1;
 
 	for (int i = 0;i < this->keysCount+1;i++) {
-		bool res = childs[i]->search(s);
-		if (res == true)
-			return true;
+		int res = childs[i]->search(s);
+		if (res != -1) {
+			lvl += res;
+			return ++lvl;
+		}
 	}
-	return false;
+	return -1;
 }
 void bTNode::addKey(int key) {
 	if (this->isLeaf == true) {
