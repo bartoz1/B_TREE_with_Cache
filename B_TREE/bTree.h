@@ -19,11 +19,14 @@ public:
 	void loadTree();
 	bTNode* loadNode();
 	void searchWithCache();
+	void searchWithSuperCache();
+	~bTree();
 private:
 	void addToCache(int data);	// dodanie wartosci do cacha
 	void shiftCache();			// przesuniecie wartosci w cachu
 	bool inCache(int data);		// szukanie wartosci w cachu
 	int getLeafLvl();				// zwraca na ktorym poziomie sa liscie
 	void printCache();
+	void deleteChildren(bTNode* parent);
 };
 

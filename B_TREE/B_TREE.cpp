@@ -43,6 +43,9 @@ int main() {
         else if (odp == "C") {
             drzewo->searchWithCache();
         }
+        else if (odp == "SC") {
+            drzewo->searchWithSuperCache();
+        }
         else if (odp == "S") {
             drzewo->printTree();
         } 

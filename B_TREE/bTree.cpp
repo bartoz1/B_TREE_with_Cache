@@ -36,6 +36,7 @@ void bTree::add(int data) {
 	}
 }
 
+
 void bTree::printTree() {
 	if (root != nullptr) {
 		std::cout << order << "\n";
@@ -127,7 +128,7 @@ void bTree::searchWithCache() {
 		std::cin.get(ctrl);		// wczytanie spacji lub konca linii
 		searchRes = searchAndGetLvl(nbr);
 		if (searchRes == -1) 
-			searchRes = getLeafLvl();;
+			searchRes = getLeafLvl();
 
 		sumNoCache += searchRes;
 		
@@ -175,4 +176,55 @@ void bTree::printCache() {
 		std::cout << cache[i] << " ";
 	}
 	std::cout << " | ";
+}
+
+void bTree::searchWithSuperCache() {
+	int sumNoCache = 0;
+	int sumCache = 0;
+	std::cin >> cacheSize;
+	cache = new int[cacheSize];
+	int nbr, searchRes;
+	char ctrl = 'a';
+	while (ctrl != '\n') {
+		std::cin >> nbr;
+		std::cin.get(ctrl);		// wczytanie spacji lub konca linii
+		searchRes = searchAndGetLvl(nbr);
+
+		if (!inCache(nbr)) {		// nie ma w cachu
+			if(searchRes != -1)		// liczba wystepuje w drzewie
+				sumCache += searchRes;
+			addToCache(nbr);
+		}
+		if (searchRes == -1) {
+			searchRes = getLeafLvl();;
+			sumCache += searchRes;
+		}
+
+		sumNoCache += searchRes;
+	}
+	std::cout << "NO SUPER_CACHE: " << sumNoCache << " SUPER_CACHE: " << sumCache << '\n';
+}
+
+bTree::~bTree() {
+
+	if (root != nullptr) {
+		//for(int i=0; i< this.; i++)
+		bTNode* tmp;
+		
+		if (root != nullptr) {
+			deleteChildren(root);
+		}
+
+	}
+
+
+}
+void bTree::deleteChildren(bTNode* parent) {
+	for (int i = 0; i < parent->keysCount + 1; i++) {
+		if (parent->childs[i] != nullptr) {
+			deleteChildren(parent->childs[i]);
+			delete parent->childs[i];
+			parent->childs[i] = nullptr;
+		}
+	}
 }
