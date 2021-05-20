@@ -1,6 +1,7 @@
 #include "bTree.h"
 #include <iostream>
 #include <string>
+#include "superCache.h"
 
 bTree::bTree(int t) {
 	order = t;
@@ -182,7 +183,7 @@ void bTree::searchWithSuperCache() {
 	int sumNoCache = 0;
 	int sumCache = 0;
 	std::cin >> cacheSize;
-	cache = new int[cacheSize];
+	superCache superCache(cacheSize);
 	int nbr, searchRes;
 	char ctrl = 'a';
 	while (ctrl != '\n') {
@@ -190,10 +191,10 @@ void bTree::searchWithSuperCache() {
 		std::cin.get(ctrl);		// wczytanie spacji lub konca linii
 		searchRes = searchAndGetLvl(nbr);
 
-		if (!inCache(nbr)) {		// nie ma w cachu
+		if (!superCache.inCache(nbr)) {		// nie ma w cachu
 			if(searchRes != -1)		// liczba wystepuje w drzewie
 				sumCache += searchRes;
-			addToCache(nbr);
+			superCache.add(nbr);
 		}
 		if (searchRes == -1) {
 			searchRes = getLeafLvl();;

@@ -1,7 +1,5 @@
 ﻿#include <iostream>
 #include <string>
-//#include "bTNode.h"
-// b tree without cache
 #include "bTree.h"
 
 using namespace std;
@@ -9,13 +7,6 @@ using namespace std;
 int main() {
     
     bTree* drzewo = nullptr;
-    
-    /*string odp;
-    while (std::cin >> odp) {
-        std::cout << odp << "\n";
-    }*/
-
-
     
     int w;
     string odp;
