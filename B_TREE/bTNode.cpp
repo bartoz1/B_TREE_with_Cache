@@ -76,6 +76,20 @@ void bTNode::addKey(int key) {
 	
 }
 
+void bTNode::removeKey(int key) {
+	bool wasDel = false;
+	for (int i = 0; i < this->keysCount; i++) {
+		if (this->keys[i] == key) {
+			wasDel = true;
+		}
+		if (wasDel) {
+			if (i < this->keysCount - 1)
+				this->keys[i] = this->keys[i + 1];
+		}
+	}
+	this->keysCount--;
+}
+
 void bTNode::splitNode(int indx, bTNode* toSplit) {
 	bTNode* newNode = new bTNode(minElem+1, toSplit->isLeaf);
 	/*std::cout << "przed splitem: \n";
@@ -125,9 +139,6 @@ void bTNode::splitNode(int indx, bTNode* toSplit) {
 void bTNode::setLeaf() {
 	this->isLeaf = true;
 }
-void bTNode::unSetLeaf() {
-	this->isLeaf = false;
-}
 
 void bTNode::printNode() {
 	int i;
@@ -152,4 +163,12 @@ void bTNode::printNodeValues() {
 	}
 	if (!this->isLeaf)
 		this->childs[i]->printNodeValues();
+}
+
+bTNode::~bTNode() {
+	if (this->keys != nullptr)
+		delete[] this->keys;
+	if (this->childs != nullptr)
+		delete[] this->childs;
+
 }

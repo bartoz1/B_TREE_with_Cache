@@ -6,15 +6,16 @@ public:
 	int keysCount;
 	int* keys;
 	bTNode** childs;
-	bTNode(int order);
-	bTNode(int order, bool isLeaf);
+	bTNode(int t);
+	bTNode(int t, bool isLeaf);
 	int search(int s);	// szukanie wartosci w obecnym nodzie i nastepnie wywolanie wyszukiwania w dzieciach
 	void setLeaf();
-	void unSetLeaf();
 	void addKey(int key);
-	void splitNode(int data, bTNode* toSplit);
+	void removeKey(int key);
+	void splitNode(int indx, bTNode* toSplit);
 	void printNode();
 	void printNodeValues();
+	~bTNode();
 
 friend class bTree;
 };

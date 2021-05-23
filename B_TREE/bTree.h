@@ -9,7 +9,7 @@ public:
 	bTNode* root;
 	int* cache;
 	int cacheSize;
-	bTree(int h);
+	bTree(int t);
 	void add(int data);
 	void splitChild();
 	void printTree();
@@ -20,13 +20,14 @@ public:
 	bTNode* loadNode();
 	void searchWithCache();
 	void searchWithSuperCache();
+	void delKey(int key);
 	~bTree();
 private:
 	void addToCache(int data);	// dodanie wartosci do cacha
 	void shiftCache();			// przesuniecie wartosci w cachu
-	bool inCache(int data);		// szukanie wartosci w cachu
-	int getLeafLvl();				// zwraca na ktorym poziomie sa liscie
-	void printCache();
+	bool inCache(int data) const;		// szukanie wartosci w cachu
+	int getLeafLvl() const;			// zwraca na ktorym poziomie sa liscie
 	void deleteChildren(bTNode* parent);
+	bTNode* getNodeWithKey(int key);
 };
 

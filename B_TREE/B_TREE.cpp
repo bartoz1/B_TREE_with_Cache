@@ -26,6 +26,10 @@ int main() {
             std::cin >> w;
             drzewo->search(w);
         }
+        else if (odp == "R") {
+            std::cin >> w;
+            drzewo->delKey(w);
+        }
         else if (odp == "L") {
             std::cin >> w;
             drzewo = new bTree(w);

@@ -15,7 +15,7 @@ void superCache::add(int data) {
 		alreadyIn = true;
 	
 	if (!alreadyIn) {	 // jezeli wartosci nie ma w cachu	
-		for (int i = 0; i < size; i++) {	// wybranie wolnego miejsca
+		for (int i = 0; i < size; i++) {	// wybranie wolnego - nieuzywanego miejsca
 			if (cache[i].isUsed == false) {	
 				where = i;
 				cache[i].isUsed = true;
@@ -53,11 +53,16 @@ int superCache::search(int data) {
 	return -1;
 }
 
-bool superCache::inCache(int data) {
+bool superCache::inCache(int data) const{
 	for (int i = 0; i < size; i++) {
 		if (cache[i].data == data) {
 			return true;
 		}
 	}
 	return false;
+}
+
+superCache::~superCache() {
+	if (cache != nullptr)
+		delete[] cache;
 }

@@ -8,6 +8,8 @@ bTree::bTree(int t) {
 	elements = 0;
 	minElem = t - 1;
 	root = nullptr;
+	cache = nullptr;
+	cacheSize = 0;
 }
 
 void bTree::add(int data) {
@@ -67,7 +69,7 @@ void bTree::search(int x) {
 int bTree::searchAndGetLvl(int x) {
 	int lvl;
 	if (root == nullptr)
-		lvl = 0;
+		lvl = -1;
 	else {
 		lvl = root->search(x);		
 	}
@@ -152,7 +154,7 @@ void bTree::shiftCache() {
 	}
 }
 
-bool bTree::inCache(int data) {
+bool bTree::inCache(int data) const{
 	for (int i = 0; i < cacheSize; i++) {
 		if (cache[i] == data)
 			return true;
@@ -160,7 +162,7 @@ bool bTree::inCache(int data) {
 	return false;
 }
 
-int bTree::getLeafLvl() {
+int bTree::getLeafLvl() const{
 	int lvl = 0;
 	bTNode* checker = root;
 	while (checker != nullptr) {
@@ -170,13 +172,6 @@ int bTree::getLeafLvl() {
 		checker = checker->childs[0];
 	}
 	return lvl;
-}
-
-void bTree::printCache() {
-	for (int i = 0; i < cacheSize; i++) {
-		std::cout << cache[i] << " ";
-	}
-	std::cout << " | ";
 }
 
 void bTree::searchWithSuperCache() {
@@ -191,14 +186,13 @@ void bTree::searchWithSuperCache() {
 		std::cin.get(ctrl);		// wczytanie spacji lub konca linii
 		searchRes = searchAndGetLvl(nbr);
 
-		if (!superCache.inCache(nbr)) {		// nie ma w cachu
-			if(searchRes != -1)		// liczba wystepuje w drzewie
-				sumCache += searchRes;
-			superCache.add(nbr);
-		}
 		if (searchRes == -1) {
 			searchRes = getLeafLvl();;
+		}
+
+		if (!superCache.inCache(nbr)) {		// nie ma w cachu
 			sumCache += searchRes;
+			superCache.add(nbr);
 		}
 
 		sumNoCache += searchRes;
@@ -206,19 +200,20 @@ void bTree::searchWithSuperCache() {
 	std::cout << "NO SUPER_CACHE: " << sumNoCache << " SUPER_CACHE: " << sumCache << '\n';
 }
 
-bTree::~bTree() {
+void bTree::delKey(int key) {
+	bTNode* del = getNodeWithKey(key);
+	if (del == nullptr)
+		return;
 
-	if (root != nullptr) {
-		//for(int i=0; i< this.; i++)
-		bTNode* tmp;
-		
-		if (root != nullptr) {
-			deleteChildren(root);
-		}
-
+	if (del->isLeaf && del->keysCount > 1) {
+		del->removeKey(key);
 	}
+}
 
-
+bTree::~bTree() {
+	if (root != nullptr) 
+		deleteChildren(root);
+	
 }
 void bTree::deleteChildren(bTNode* parent) {
 	for (int i = 0; i < parent->keysCount + 1; i++) {
@@ -228,4 +223,34 @@ void bTree::deleteChildren(bTNode* parent) {
 			parent->childs[i] = nullptr;
 		}
 	}
+}
+
+bTNode* bTree::getNodeWithKey(int key) {
+	if (root == nullptr)
+		return nullptr;
+
+	bTNode* tmp1 = root;
+	bTNode* found = nullptr;
+
+	while (tmp1 != nullptr) {
+		for (int i = 0;i < tmp1->keysCount; i++) {	// sprawdzenie wszystkich kluczy w tmp1
+			if (tmp1->keys[i] == key) {
+				found = tmp1;
+				break;
+			}
+		}
+		// wybieramy wlasciwe dziecko
+		for (int i = 0;i < tmp1->keysCount; i++) {
+			if (tmp1->keys[i] > key) {
+				tmp1 = tmp1->childs[i];
+				break;
+			}
+			if (i == tmp1->keysCount - 1) {
+				tmp1 = tmp1->childs[i+1];
+				break;
+			}
+		}
+	}
+
+	return found;
 }

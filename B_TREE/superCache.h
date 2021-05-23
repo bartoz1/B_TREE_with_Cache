@@ -17,7 +17,8 @@ public:
 	superCache(int size);
 	void add(int data);
 	int search(int data);
-	bool inCache(int data);
+	bool inCache(int data) const;
+	~superCache();
 
 };
 
